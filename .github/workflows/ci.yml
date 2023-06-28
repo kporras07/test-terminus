@@ -1,8 +1,6 @@
 name: CI
 
 on: [push, pull_request]
-env:
-  TERMINUS: "~/terminus/terminus"
 
 jobs:
   connect:
@@ -45,17 +43,17 @@ jobs:
           echo "Installing Terminus v$TERMINUS_RELEASE"
           curl -L https://github.com/pantheon-systems/terminus/releases/download/$TERMINUS_RELEASE/terminus.phar --output terminus
           chmod +x terminus
-          ls -alh ~/terminus
-          ~/terminus/terminus whoami
+          sudo ln -s ~/terminus/terminus /usr/local/bin/terminus
+
         env:
           TERMINUS_RELEASE: ${{ inputs.terminus-version || env.TERMINUS_RELEASE }}
       - name: Authenticate Terminus
         env:
           TERMINUS_TOKEN: ${{ secrets.TERMINUS_TOKEN }}
         run: |
-          $TERMINUS auth:login --machine-token="${TERMINUS_TOKEN}"
+          terminus auth:login --machine-token="${TERMINUS_TOKEN}"
       - name: Whoami
-        run: $TERMINUS auth:whoami
+        run: terminus auth:whoami
   deploy:
     needs: [connect]
     runs-on: ubuntu-latest
@@ -80,4 +78,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-terminus-binary-
       - name: Whoami
-        run: $TERMINUS auth:whoami
+        run: |
+          sudo ln -s ~/terminus/terminus /usr/local/bin/terminus
+          terminus auth:whoami
