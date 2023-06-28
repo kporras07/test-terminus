@@ -45,6 +45,7 @@ jobs:
           echo "Installing Terminus v$TERMINUS_RELEASE"
           curl -L https://github.com/pantheon-systems/terminus/releases/download/$TERMINUS_RELEASE/terminus.phar --output terminus
           chmod +x terminus
+          ls -alh ~/terminus
         env:
           TERMINUS_RELEASE: ${{ inputs.terminus-version || env.TERMINUS_RELEASE }}
       - name: Authenticate Terminus
