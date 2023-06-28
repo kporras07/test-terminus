@@ -2,7 +2,7 @@ name: CI
 
 on: [push, pull_request]
 env:
-  TERMINUS:~/terminus/terminus
+  TERMINUS: "~/terminus/terminus"
 
 jobs:
   connect:
